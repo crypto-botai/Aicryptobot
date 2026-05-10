@@ -18,11 +18,16 @@ const BOTS = [
 ];
 
 const AI_MODELS = [
-  { name: 'Claude 3.5', weight: 30, signal: 'BUY', confidence: 87, icon: '🧠' },
-  { name: 'GPT-4o', weight: 25, signal: 'BUY', confidence: 79, icon: '⚡' },
-  { name: 'Technical AI', weight: 20, signal: 'BUY', confidence: 91, icon: '📊' },
-  { name: 'Risk AI', weight: 15, signal: 'HOLD', confidence: 62, icon: '🛡️' },
-  { name: 'News AI', weight: 10, signal: 'BUY', confidence: 74, icon: '📰' },
+  { name: 'Claude 3.5',           weight: 18, signal: 'BUY',  confidence: 87, icon: '🧠', color: '#a855f7' },
+  { name: 'GPT-4o',               weight: 15, signal: 'BUY',  confidence: 81, icon: '🌐', color: '#10b981' },
+  { name: 'Gemini 1.5 Flash',     weight: 12, signal: 'BUY',  confidence: 84, icon: '⭐', color: '#3b82f6' },
+  { name: 'DeepSeek',             weight: 10, signal: 'BUY',  confidence: 78, icon: '⚡', color: '#06b6d4' },
+  { name: 'Groq Llama 3.1',       weight:  8, signal: 'BUY',  confidence: 76, icon: '🚀', color: '#f97316' },
+  { name: 'Mistral (OpenRouter)', weight:  7, signal: 'HOLD', confidence: 61, icon: '🔀', color: '#ec4899' },
+  { name: 'NVIDIA NIM',           weight:  5, signal: 'BUY',  confidence: 73, icon: '💚', color: '#22c55e' },
+  { name: 'Technical AI',         weight: 12, signal: 'BUY',  confidence: 91, icon: '📊', color: '#6366f1' },
+  { name: 'Risk AI',              weight:  8, signal: 'HOLD', confidence: 58, icon: '🛡️', color: '#f43f5e' },
+  { name: 'News Sentiment',       weight:  5, signal: 'BUY',  confidence: 69, icon: '📰', color: '#f59e0b' },
 ];
 
 const POSITIONS = [
@@ -145,7 +150,7 @@ function BotCard({ bot }: { bot: typeof BOTS[0] }) {
 }
 
 function AIValidation() {
-  const overall = 83;
+  const overall = Math.round(AI_MODELS.reduce((acc, m) => acc + m.confidence * m.weight / 100, 0));
   const [hovered, setHovered] = useState<number | null>(null);
 
   return (
@@ -160,29 +165,30 @@ function AIValidation() {
           <div className="text-xs text-slate-400">Confidence</div>
         </div>
       </div>
-      <div className="space-y-3 mb-4">
+      <div className="space-y-2 mb-4 max-h-64 overflow-y-auto pr-1">
         {AI_MODELS.map((m, i) => (
           <motion.div key={m.name} onHoverStart={() => setHovered(i)} onHoverEnd={() => setHovered(null)}
-            className="flex items-center gap-3 cursor-default">
-            <span className="text-lg w-6">{m.icon}</span>
-            <div className="flex-1">
-              <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-300">{m.name}</span>
-                <div className="flex items-center gap-2">
-                  <span className={`px-1.5 py-0.5 rounded text-xs font-bold ${
+            className="flex items-center gap-2 cursor-default">
+            <span className="text-sm w-5 shrink-0">{m.icon}</span>
+            <div className="flex-1 min-w-0">
+              <div className="flex justify-between text-xs mb-0.5">
+                <span className="text-slate-300 truncate text-[11px]">{m.name}</span>
+                <div className="flex items-center gap-1.5 shrink-0 ml-1">
+                  <span className={`px-1 py-0.5 rounded text-[10px] font-bold ${
                     m.signal === 'BUY' ? 'bg-emerald-500/20 text-emerald-400' :
                     m.signal === 'SELL' ? 'bg-rose-500/20 text-rose-400' : 'bg-amber-500/20 text-amber-400'
                   }`}>{m.signal}</span>
-                  <span className="text-white font-medium">{m.confidence}%</span>
+                  <span className="text-white font-medium text-xs">{m.confidence}%</span>
+                  <span className="text-slate-600 text-[10px]">{m.weight}w</span>
                 </div>
               </div>
-              <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div className="h-1 bg-white/10 rounded-full overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: `${m.confidence}%` }}
-                  transition={{ delay: i * 0.1, duration: 0.7 }}
-                  className="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500" />
+                  transition={{ delay: i * 0.07, duration: 0.7 }}
+                  className="h-full rounded-full"
+                  style={{ background: m.color }} />
               </div>
             </div>
-            <span className="text-xs text-slate-500 w-8 text-right">{m.weight}%</span>
           </motion.div>
         ))}
       </div>
