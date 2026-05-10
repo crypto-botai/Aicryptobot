@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { ThemeProvider } from 'next-themes';
-import { Toaster } from 'react-hot-toast';
+import Providers from '@/components/providers/Providers';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -32,24 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="min-h-screen bg-dark-950 text-slate-100 antialiased">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <Providers>
           <div className="animated-bg" aria-hidden="true" />
           {children}
-          <Toaster
-            position="top-right"
-            toastOptions={{
-              style: {
-                background: 'rgba(15, 23, 42, 0.95)',
-                color: '#f8fafc',
-                border: '1px solid rgba(255,255,255,0.1)',
-                backdropFilter: 'blur(12px)',
-                borderRadius: '12px',
-              },
-              success: { iconTheme: { primary: '#10b981', secondary: '#020617' } },
-              error:   { iconTheme: { primary: '#f43f5e', secondary: '#020617' } },
-            }}
-          />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );
