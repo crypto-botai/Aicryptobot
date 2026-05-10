@@ -38,4 +38,16 @@ export class ExchangeController {
   getBalances(@CurrentUser() user: UserEntity, @Param('id') id: string) {
     return this.exchangeService.getBalances(user.id, id);
   }
+
+  @Post('connections/:id/test')
+  @ApiOperation({ summary: 'Test an exchange connection' })
+  testConnection(@CurrentUser() user: UserEntity, @Param('id') id: string) {
+    return this.exchangeService.testConnection(user.id, id);
+  }
+
+  @Delete('connections/:id')
+  @ApiOperation({ summary: 'Remove an exchange connection' })
+  deleteConnection(@CurrentUser() user: UserEntity, @Param('id') id: string) {
+    return this.exchangeService.deleteConnection(user.id, id);
+  }
 }

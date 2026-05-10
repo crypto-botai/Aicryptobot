@@ -78,6 +78,27 @@ export class ExchangeService {
     return nonZero;
   }
 
+  async deleteConnection(userId: string, connectionId: string): Promise<void> {
+    const conn = await this.connRepo.findOne({ where: { id: connectionId, userId } });
+    if (!conn) throw new NotFoundException('Exchange connection not found');
+    await this.connRepo.update(connectionId, { isActive: false });
+    this.exchangeInstances.delete(`${connectionId}:${userId}`);
+  }
+
+  async testConnection(userId: string, connectionId: string): Promise<{ success: boolean; latencyMs: number; message: string }> {
+    const start = Date.now();
+    try {
+      const exchange = await this.getExchange(connectionId, userId);
+      await exchange.fetchBalance();
+      const latencyMs = Date.now() - start;
+      await this.connRepo.update(connectionId, { isVerified: true, lastVerifiedAt: new Date() });
+      return { success: true, latencyMs, message: 'Connection verified successfully' };
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Connection test failed';
+      return { success: false, latencyMs: Date.now() - start, message };
+    }
+  }
+
   async getCurrentPrice(exchangeId: string, symbol: string): Promise<number> {
     try {
       // Use public API (no auth needed)
