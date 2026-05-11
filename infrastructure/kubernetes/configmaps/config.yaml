@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: aicryptobot
+  labels:
+    name: aicryptobot
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aicryptobot-config
+  namespace: aicryptobot
+data:
+  NODE_ENV: "production"
+  APP_PORT: "3001"
+  REDIS_HOST: "redis-master"
+  REDIS_PORT: "6379"
+  DATABASE_HOST: "postgres-postgresql"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "aicryptobot"
+  AI_ENGINE_URL: "http://ai-engine-svc:8000"
+  CORS_ORIGINS: "https://app.aicryptobot.com"
+  FRONTEND_URL: "https://app.aicryptobot.com"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ai-models-pvc
+  namespace: aicryptobot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard

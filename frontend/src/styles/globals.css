@@ -1,0 +1,235 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 2 6 23;
+    --foreground: 248 250 252;
+    --card: 15 23 42;
+    --card-foreground: 248 250 252;
+    --border: 30 41 59;
+    --input: 30 41 59;
+    --ring: 99 102 241;
+    --radius: 0.75rem;
+    --brand: 99 102 241;
+    --brand-dark: 79 70 229;
+    --success: 16 185 129;
+    --danger: 244 63 94;
+    --warning: 245 158 11;
+  }
+
+  * {
+    border-color: rgb(30 41 59 / 1);
+    box-sizing: border-box;
+  }
+
+  html {
+    @apply antialiased;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: rgb(2, 6, 23);
+    color: rgb(248, 250, 252);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-feature-settings: 'cv11', 'ss01';
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+  ::-webkit-scrollbar-track {
+    background: rgb(15, 23, 42);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgb(51, 65, 85);
+    border-radius: 100px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(99, 102, 241);
+  }
+
+  /* Selection */
+  ::selection {
+    background: rgba(99, 102, 241, 0.3);
+    color: white;
+  }
+}
+
+@layer components {
+  /* ── Glassmorphism Cards ─── */
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl border border-white/10;
+    background: linear-gradient(135deg, rgba(255,255,255,0.07), rgba(255,255,255,0.03));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-card-hover {
+    @apply glass-card transition-all duration-300;
+  }
+  .glass-card-hover:hover {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 0 30px rgba(99, 102, 241, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* ── Premium Buttons ─── */
+  .btn-primary {
+    @apply relative inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-dark-900;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+  }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, #818cf8, #6366f1);
+    box-shadow: 0 6px 25px rgba(99, 102, 241, 0.6);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-6 py-3 text-sm font-semibold text-slate-200 backdrop-blur-sm transition-all duration-200;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .btn-secondary:hover {
+    @apply border-brand-500/40 text-white;
+    background: rgba(99, 102, 241, 0.1);
+  }
+
+  .btn-danger {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all duration-200;
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);
+  }
+  .btn-danger:hover {
+    box-shadow: 0 6px 25px rgba(244, 63, 94, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-success {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold text-white transition-all duration-200;
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+  }
+  .btn-success:hover {
+    box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+    transform: translateY(-1px);
+  }
+
+  /* ── Status Badges ─── */
+  .badge-success {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+  }
+  .badge-danger {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+    background: rgba(244, 63, 94, 0.15);
+    color: #fb7185;
+    border: 1px solid rgba(244, 63, 94, 0.3);
+  }
+  .badge-warning {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+  }
+  .badge-info {
+    @apply inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+  }
+
+  /* ── Number Display ─── */
+  .num-positive { @apply text-emerald-400 font-mono; }
+  .num-negative { @apply text-rose-400 font-mono; }
+  .num-neutral  { @apply text-slate-400 font-mono; }
+
+  /* ── Input ─── */
+  .input-field {
+    @apply w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder-slate-500 backdrop-blur-sm transition-all duration-200 focus:border-brand-500/60 focus:outline-none focus:ring-1 focus:ring-brand-500/40;
+  }
+
+  /* ── Gradient Text ─── */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #a5b4fc, #818cf8, #6366f1);
+  }
+  .gradient-text-gold {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, #fbbf24, #f59e0b, #d97706);
+  }
+
+  /* ── Animated Background ─── */
+  .animated-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background: radial-gradient(ellipse at top left, rgba(99,102,241,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom right, rgba(168,85,247,0.05) 0%, transparent 50%),
+                rgb(2, 6, 23);
+  }
+
+  /* ── Sidebar ─── */
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-slate-400 transition-all duration-200;
+  }
+  .sidebar-link:hover {
+    @apply text-white;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .sidebar-link.active {
+    @apply text-white;
+    background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(99,102,241,0.1));
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.05);
+  }
+  .sidebar-link.active svg { @apply text-brand-400; }
+
+  /* ── Table ─── */
+  .data-table {
+    @apply w-full text-sm;
+  }
+  .data-table thead tr {
+    @apply border-b border-white/5;
+  }
+  .data-table thead th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500;
+  }
+  .data-table tbody tr {
+    @apply border-b border-white/5 transition-colors duration-150;
+  }
+  .data-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
+  .data-table tbody td {
+    @apply px-4 py-3.5 text-slate-300;
+  }
+
+  /* ── Glow Effect ─── */
+  .glow-brand { box-shadow: 0 0 20px rgba(99, 102, 241, 0.4); }
+  .glow-gold  { box-shadow: 0 0 20px rgba(251, 191, 36, 0.4); }
+  .glow-green { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+  .glow-red   { box-shadow: 0 0 20px rgba(244, 63, 94, 0.4); }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .border-gradient {
+    border-image: linear-gradient(135deg, rgba(99,102,241,0.5), rgba(168,85,247,0.3)) 1;
+  }
+}
