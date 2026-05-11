@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { AiService } from './ai.service';
+import { AiService, TradeContext } from './ai.service';
 import { UserEntity } from '../users/user.entity';
 
 @ApiTags('AI')
@@ -14,8 +14,8 @@ export class AiController {
 
   @Post('validate-trade')
   @ApiOperation({ summary: 'Run multi-model AI trade validation' })
-  validateTrade(@Body() context: Record<string, unknown>) {
-    return this.aiService.validateTrade(context as Parameters<AiService['validateTrade']>[0]);
+  validateTrade(@Body() context: TradeContext) {
+    return this.aiService.validateTrade(context);
   }
 
   @Get('insights')

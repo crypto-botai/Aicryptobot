@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { TradeValidationEntity } from './entities/trade-validation.entity';
 import { AiInsightEntity } from './entities/ai-insight.entity';
@@ -27,7 +27,7 @@ export class LearningService {
 
       // Get recent completed validations with outcomes
       const completedValidations = await this.validationRepo.find({
-        where: { tradeOutcome: 'win' || 'loss' } as Partial<TradeValidationEntity>,
+        where: { tradeOutcome: In(['win', 'loss']) },
         take: 1000,
         order: { createdAt: 'DESC' },
       });

@@ -8,7 +8,7 @@ import { Repository } from 'typeorm';
 import { TradeValidationEntity } from './entities/trade-validation.entity';
 import { AiInsightEntity } from './entities/ai-insight.entity';
 
-interface TradeContext {
+export interface TradeContext {
   symbol: string;
   side: string;
   type: string;
@@ -19,7 +19,7 @@ interface TradeContext {
   marketData?: Record<string, unknown>;
 }
 
-interface ValidationResult {
+export interface ValidationResult {
   approved: boolean;
   overallConfidence: number;
   validations: ModelValidation[];
@@ -261,8 +261,8 @@ export class AiService {
         { role: 'system', content: 'You are a crypto trading analyst. Respond with valid JSON only.' },
         { role: 'user', content: TRADE_PROMPT(ctx) },
       ],
-    } as Parameters<typeof this.openrouter.chat.completions.create>[0]);
-    const text = res.choices[0].message.content ?? '{}';
+    });
+    const text = (res as { choices: { message: { content: string } }[] }).choices[0].message.content ?? '{}';
     const clean = text.replace(/```json|```/g, '').trim();
     const parsed = JSON.parse(clean);
     return { model: 'mistral-large (openrouter)', provider: 'openrouter', weight: MODEL_WEIGHTS.openrouter,

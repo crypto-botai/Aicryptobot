@@ -113,7 +113,7 @@ export class ExchangeService {
   }
 
   async placeOrder(exchangeId: string, userId: string, params: PlaceOrderParams): Promise<ccxt.Order> {
-    const conn = await this.connRepo.findOne({ where: { userId, exchangeId, isActive: true } as Partial<ExchangeConnectionEntity> });
+    const conn = await this.connRepo.findOne({ where: { userId, exchangeId, isActive: true } });
     if (!conn) throw new NotFoundException(`No active connection for ${exchangeId}`);
 
     const exchange = await this.getExchange(conn.id, userId);

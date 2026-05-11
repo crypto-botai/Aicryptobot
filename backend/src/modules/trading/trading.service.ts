@@ -7,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { OrderEntity } from './entities/order.entity';
 import { PositionEntity } from './entities/position.entity';
 import { ExchangeService } from '../exchange/exchange.service';
-import { AiService } from '../ai/ai.service';
+import { AiService, ValidationResult } from '../ai/ai.service';
 import { RiskService } from '../risk/risk.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { AlertsService } from '../alerts/alerts.service';
@@ -34,7 +34,7 @@ export class TradingService {
     }
 
     // AI validation (if enabled)
-    let aiValidation: Record<string, unknown> | undefined;
+    let aiValidation: ValidationResult | undefined;
     if (dto.useAiValidation !== false) {
       aiValidation = await this.aiService.validateTrade({
         symbol: dto.symbol,
@@ -46,7 +46,7 @@ export class TradingService {
         takeProfit: dto.takeProfit,
       });
 
-      const confidence = (aiValidation as { overallConfidence: number }).overallConfidence ?? 0;
+      const confidence = aiValidation.overallConfidence ?? 0;
       if (confidence < (dto.aiConfidenceThreshold ?? 0.7) && !dto.overrideAI) {
         throw new BadRequestException(
           `AI confidence too low (${Math.round(confidence * 100)}%). Use overrideAI=true to force.`
@@ -66,7 +66,7 @@ export class TradingService {
       price: dto.price ?? 0,
       quantity: dto.quantity,
       mode: dto.mode ?? 'paper',
-      aiValidation,
+      aiValidation: aiValidation as unknown as Record<string, unknown>,
     });
     await this.orderRepo.save(order);
 

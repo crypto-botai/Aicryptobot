@@ -34,14 +34,14 @@ export class LicensingController {
     return this.licensingService.activateLicense(user.id, dto.key, dto.deviceFingerprint, {
       deviceName: dto.deviceName,
       ipAddress: (req as unknown as { ip: string }).ip,
-      userAgent: (req.headers as Record<string, string>)['user-agent'],
+      userAgent: (req as unknown as { headers: Record<string, string> }).headers['user-agent'],
     });
   }
 
   @Get('validate')
   @ApiOperation({ summary: 'Check license validity for current session' })
   validate(@CurrentUser() user: UserEntity, @Req() req: Request) {
-    const fp = (req.headers as Record<string, string>)['x-device-fingerprint'] ?? 'unknown';
+    const fp = (req as unknown as { headers: Record<string, string> }).headers['x-device-fingerprint'] ?? 'unknown';
     return this.licensingService.validateLicense(user.id, fp);
   }
 }
