@@ -204,6 +204,7 @@ export interface ModelValidation {
   signal: 'bullish' | 'bearish' | 'neutral';
   reasoning: string;
   latencyMs: number;
+  weight?: number;
 }
 
 export interface AIInsight {
