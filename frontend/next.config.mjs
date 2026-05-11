@@ -1,12 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: true,
   images: {
     domains: ['assets.coingecko.com', 'cryptologos.cc'],
     formats: ['image/avif', 'image/webp'],
   },
   experimental: {
-    serverActions: { allowedOrigins: ['localhost:3000'] },
+    serverActions: { allowedOrigins: ['localhost:3000', '34.28.86.115:3000'] },
   },
   async headers() {
     return [
